@@ -1,1 +1,2 @@
 # Prototypes-Emoji-Survivors
+pages
