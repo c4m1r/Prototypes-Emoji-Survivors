@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-10px);
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-2px, -2px) rotate(-1deg); }
+  20% { transform: translate(2px, 2px) rotate(1deg); }
+  30% { transform: translate(-2px, 2px) rotate(-1deg); }
+  40% { transform: translate(2px, -2px) rotate(1deg); }
+  50% { transform: translate(-2px, -2px) rotate(-1deg); }
+  60% { transform: translate(2px, 2px) rotate(1deg); }
+  70% { transform: translate(-2px, 2px) rotate(-1deg); }
+  80% { transform: translate(2px, -2px) rotate(1deg); }
+  90% { transform: translate(-2px, -2px) rotate(-1deg); }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.particle-cloud .particle {
+  position: absolute;
+  animation: float 6s ease-in-out infinite, twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.text-shadow-glow {
+  text-shadow:
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor;
+}
+
+.parallax-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.parallax-layer-1 {
+  transform: translateZ(-100px) scale(2);
+}
+
+.parallax-layer-2 {
+  transform: translateZ(-50px) scale(1.5);
+}
+
+.parallax-layer-3 {
+  transform: translateZ(-25px) scale(1.25);
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 10s ease infinite;
+}
+
+.backdrop-blur-game {
+  backdrop-filter: blur(8px) saturate(180%);
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+@keyframes hp-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 1);
+  }
+}
+
+.hp-bar {
+  animation: hp-pulse 1s ease-in-out infinite;
+}
+
+@keyframes damage-flash {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2) saturate(200%);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.damage-flash {
+  animation: damage-flash 0.2s ease-out;
+}
+
+canvas {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@keyframes wave-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.wave-effect {
+  animation: wave-pulse 1s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
