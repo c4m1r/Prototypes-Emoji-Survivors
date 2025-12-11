@@ -32,11 +32,21 @@ export function MainMenu({ onStartGame, profile, onProfileUpdate, language, onLa
   const canBuyHero = (hero: typeof heroes[0]) => {
     if (hero.unlockCondition === 'coins500') return profile?.totalCoins >= 500;
     if (hero.unlockCondition === 'coins1000') return profile?.totalCoins >= 1000;
+    if (hero.unlockCondition === 'coins3000') return profile?.totalCoins >= 3000;
+    if (hero.unlockCondition === 'coins7000') return profile?.totalCoins >= 7000;
     return false;
   };
 
+  const getCost = (hero: typeof heroes[0]) => {
+    if (hero.unlockCondition === 'coins500') return 500;
+    if (hero.unlockCondition === 'coins1000') return 1000;
+    if (hero.unlockCondition === 'coins3000') return 3000;
+    if (hero.unlockCondition === 'coins7000') return 7000;
+    return 0;
+  };
+
   const unlockHero = (hero: typeof heroes[0]) => {
-    const cost = hero.unlockCondition === 'coins500' ? 500 : 1000;
+    const cost = getCost(hero);
     if (profile && profile.totalCoins >= cost) {
       const newProfile = {
         ...profile,
@@ -146,7 +156,7 @@ export function MainMenu({ onStartGame, profile, onProfileUpdate, language, onLa
                     onClick={() => unlockHero(selectedHero)}
                     className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold transition-colors"
                   >
-                    {t.menu.buyHero} {selectedHero.unlockCondition === 'coins500' ? '500' : '1000'} 💰
+                    {t.menu.buyHero} {getCost(selectedHero)} 💰
                   </button>
                 ) : (
                   <div className="text-red-400 font-bold">

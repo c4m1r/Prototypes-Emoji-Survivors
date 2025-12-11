@@ -36,12 +36,24 @@ function App() {
         totalDeaths: profile.totalDeaths + 1,
       };
 
-      if (Math.floor(stats.time) >= 60 && !newProfile.unlockedHeroes.includes('🧑‍🚀')) {
-        newProfile.unlockedHeroes.push('🧑‍🚀');
+      if (!newProfile.unlockedHeroes) {
+        newProfile.unlockedHeroes = ['🙂'];
       }
 
-      if (stats.damage >= 50000 && !newProfile.unlockedHeroes.includes('🧑‍🎤')) {
-        newProfile.unlockedHeroes.push('🧑‍🎤');
+      if (Math.floor(stats.time) >= 60 && !newProfile.unlockedHeroes.includes('💀')) {
+        newProfile.unlockedHeroes.push('💀');
+      }
+
+      if (stats.damage >= 50000 && !newProfile.unlockedHeroes.includes('👹')) {
+        newProfile.unlockedHeroes.push('👹');
+      }
+
+      if (newProfile.totalDeaths >= 3 && !newProfile.unlockedHeroes.includes('👻')) {
+        newProfile.unlockedHeroes.push('👻');
+      }
+
+      if (stats.defeatedBoss && !newProfile.unlockedHeroes.includes('🤖')) {
+        newProfile.unlockedHeroes.push('🤖');
       }
 
       setProfile(newProfile);

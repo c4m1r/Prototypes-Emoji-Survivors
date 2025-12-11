@@ -248,6 +248,7 @@ function getWeaponData(id: string): Weapon {
     magicCharge: { id: 'magicCharge', emoji: '🌟', name: 'Magic Charge', level: 1, damage: 25, cooldown: 2000, lastFired: 0 },
     radioWave: { id: 'radioWave', emoji: '📡', name: 'Radio Wave', level: 1, damage: 15, cooldown: 3000, lastFired: 0 },
     birdAttack: { id: 'birdAttack', emoji: '🐦', name: 'Birds', level: 1, damage: 12, cooldown: 1500, lastFired: 0, orbitalAngle: 0 },
+    demonAttack: { id: 'demonAttack', emoji: '👺', name: 'Demon', level: 1, damage: 15, cooldown: 10000, lastFired: 0, orbitalAngle: 0 },
   };
   return weapons[id] || weapons.autoBullet;
 }
@@ -420,6 +421,9 @@ function updateWeapons(state: GameState, deltaTime: number) {
       } else if (weapon.id === 'birdAttack') {
         fireBirdAttack(state, weapon);
         weapon.lastFired = now;
+      } else if (weapon.id === 'demonAttack') {
+        fireDemonAttack(state, weapon);
+        weapon.lastFired = now;
       }
     }
 
@@ -555,6 +559,23 @@ function fireRadioWave(state: GameState, weapon: Weapon) {
 
 function fireBirdAttack(state: GameState, weapon: Weapon) {
   weapon.orbitalAngle = (weapon.orbitalAngle || 0) + 0.15;
+}
+
+function fireDemonAttack(state: GameState, weapon: Weapon) {
+  let cooldown = 10000;
+  let damageBonus = 1;
+
+  if (weapon.level >= 2) {
+    cooldown = 7000;
+    damageBonus = 1.2;
+  }
+  if (weapon.level >= 3) {
+    cooldown = 5000;
+    damageBonus = 1.35;
+  }
+
+  weapon.cooldown = cooldown;
+  weapon.orbitalAngle = (weapon.orbitalAngle || 0) + 0.12;
 }
 
 function updateProjectiles(state: GameState, deltaTime: number) {
@@ -859,6 +880,56 @@ function renderGame(ctx: CanvasRenderingContext2D, state: GameState, shake: numb
             damage: weapon.damage * weapon.level,
             bounces: 0,
             maxBounces: 3,
+          });
+        }
+      }
+    }
+
+    if (weapon.id === 'demonAttack') {
+      const demonCount = Math.min(weapon.level, 3);
+      const orbitRadius = 100 + weapon.level * 15;
+      const angle = weapon.orbitalAngle || 0;
+      let damageMultiplier = 1;
+
+      if (weapon.level >= 2) damageMultiplier = 1.2;
+      if (weapon.level >= 3) damageMultiplier = 1.35;
+
+      for (let i = 0; i < demonCount; i++) {
+        const demonAngle = angle + (Math.PI * 2 * i) / demonCount;
+        const demonX = state.player.x + Math.cos(demonAngle) * orbitRadius;
+        const demonY = state.player.y + Math.sin(demonAngle) * orbitRadius;
+
+        ctx.font = '32px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('👺', demonX, demonY);
+
+        let targetEnemy = null;
+        let minDist = 180 + weapon.level * 40;
+
+        for (const enemy of state.enemies) {
+          const dist = Math.hypot(enemy.x - demonX, enemy.y - demonY);
+          if (dist < minDist) {
+            minDist = dist;
+            targetEnemy = enemy;
+          }
+        }
+
+        if (targetEnemy) {
+          const dx = targetEnemy.x - demonX;
+          const dy = targetEnemy.y - demonY;
+          const dist = Math.hypot(dx, dy);
+
+          state.projectiles.push({
+            id: `demon-proj-${Date.now()}-${i}`,
+            x: demonX,
+            y: demonY,
+            vx: (dx / dist) * 9,
+            vy: (dy / dist) * 9,
+            emoji: '👺',
+            damage: weapon.damage * weapon.level * damageMultiplier,
+            bounces: 0,
+            maxBounces: 2,
           });
         }
       }

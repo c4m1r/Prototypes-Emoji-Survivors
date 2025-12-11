@@ -15,6 +15,13 @@ const enemies = [
   { emoji: '👾', name: 'Alien', hp: '35-70', damage: '16-22', speed: 'Medium' },
 ];
 
+const bosses = [
+  { emoji: '👑', name: 'King', hp: '200-300', damage: '30-40', speed: 'Medium', ability: 'Crown Attack' },
+  { emoji: '🧛', name: 'Vampire', hp: '180-250', damage: '25-35', speed: 'Fast', ability: 'Life Drain' },
+  { emoji: '🐲', name: 'Ancient Dragon', hp: '300-400', damage: '40-50', speed: 'Slow', ability: 'Flame Breath' },
+  { emoji: '🧌', name: 'Golem', hp: '250-350', damage: '35-45', speed: 'Very Slow', ability: 'Stone Prison' },
+];
+
 const upgrades = [
   { emoji: '🔥', name: '+15% Damage', description: 'Increase all weapon damage by 15%', effect: 'Multiplicative' },
   { emoji: '❤️', name: '+30 HP', description: 'Increase maximum health by 30', effect: 'Additive' },
@@ -27,17 +34,18 @@ const weapons = [
   { emoji: '🌟', name: 'Magic Charge', damage: '25', cooldown: '2s', description: 'Powerful single target blast' },
   { emoji: '📡', name: 'Radio Wave', damage: '15', cooldown: '3s', description: 'Expanding wave of energy' },
   { emoji: '🐦', name: 'Birds', damage: '12', cooldown: '1.5s', description: 'Orbital birds that attack nearby enemies' },
+  { emoji: '👺', name: 'Demon', damage: '15→18→21', cooldown: '10s→7s→5s', description: 'Demon that attacks frequently' },
 ];
 
 const loot = [
   { emoji: '💰', name: 'Coin', value: '1-10', effect: 'Earn currency' },
   { emoji: '❤️', name: 'Health Pack', value: '+30 HP', effect: 'Restore health' },
-  { emoji: '✨', name: 'XP Orb', value: '+50 XP', effect: 'Gain experience' },
+  { emoji: '⭐', name: 'XP Star', value: '+50 XP', effect: 'Gain experience' },
   { emoji: '💎', name: 'Gem', value: '+5 All Stats', effect: 'Powerful buff' },
 ];
 
 export function Codex({ onBack, language }: CodexProps) {
-  const [tab, setTab] = useState<'enemies' | 'weapons' | 'upgrades' | 'loot'>('enemies');
+  const [tab, setTab] = useState<'enemies' | 'bosses' | 'weapons' | 'upgrades' | 'loot'>('enemies');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
@@ -54,7 +62,7 @@ export function Codex({ onBack, language }: CodexProps) {
       </h1>
 
       <div className="flex gap-4 mb-8 flex-wrap">
-        {(['enemies', 'weapons', 'upgrades', 'loot'] as const).map((t) => (
+        {(['enemies', 'bosses', 'weapons', 'upgrades', 'loot'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -79,6 +87,20 @@ export function Codex({ onBack, language }: CodexProps) {
                 <p>HP: {enemy.hp}</p>
                 <p>Damage: {enemy.damage}</p>
                 <p>Speed: {enemy.speed}</p>
+              </div>
+            </div>
+          ))}
+
+        {tab === 'bosses' &&
+          bosses.map((boss) => (
+            <div key={boss.emoji} className="bg-slate-800/50 border-2 border-red-500 rounded-xl p-6 hover:border-yellow-400 transition-colors backdrop-blur-sm">
+              <div className="text-5xl mb-3">{boss.emoji}</div>
+              <h3 className="text-xl font-bold text-white mb-2">{boss.name}</h3>
+              <div className="text-sm text-gray-300 space-y-1">
+                <p>HP: {boss.hp}</p>
+                <p>Damage: {boss.damage}</p>
+                <p>Speed: {boss.speed}</p>
+                <p className="text-red-300 mt-2">Ability: {boss.ability}</p>
               </div>
             </div>
           ))}
